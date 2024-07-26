@@ -31,17 +31,26 @@ const DetailsBanner = ({ video, crew }) => {
   );
 
   const toHoursAndMinutes = (totalMinutes) => {
+    if (typeof totalMinutes !== 'number') return 'N/A';
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     return `${hours}h${minutes > 0 ? ` ${minutes}m` : ""}`;
   };
 
+  const rating = typeof data?.vote_average === 'number'
+    ? data.vote_average.toFixed(1)
+    : 'N/A';
+
+  const releaseDate = data?.release_date
+    ? dayjs(data.release_date).format("MMM D, YYYY")
+    : 'N/A';
+
   return (
     <div className="detailsBanner">
       {!loading ? (
         <>
-          {!!data && (
-            <React.Fragment>
+          {data && (
+            <>
               <div className="backdrop-img">
                 <Img src={url.backdrop + data.backdrop_path} />
               </div>
@@ -49,14 +58,10 @@ const DetailsBanner = ({ video, crew }) => {
               <ContentWrapper>
                 <div className="content">
                   <div className="left">
-                    {data.poster_path ? (
-                      <Img
-                        className="posterImg"
-                        src={url.backdrop + data.poster_path}
-                      />
-                    ) : (
-                      <Img className="posterImg" src={PosterFallback} />
-                    )}
+                    <Img
+                      className="posterImg"
+                      src={data.poster_path ? url.backdrop + data.poster_path : PosterFallback}
+                    />
                   </div>
                   <div className="right">
                     <div className="title">
@@ -64,12 +69,12 @@ const DetailsBanner = ({ video, crew }) => {
                         data?.release_date
                       ).format("YYYY")})`}
                     </div>
-                    <div className="subtitle">{data.tagline}</div>
+                    <div className="subtitle">{data.tagline || 'N/A'}</div>
 
                     <Genres data={_genres} />
 
                     <div className="row">
-                      <CircleRating rating={data.vote_average.toFixed(1)} />
+                      <CircleRating rating={rating} />
                       <div
                         className="playbtn"
                         onClick={() => {
@@ -84,7 +89,7 @@ const DetailsBanner = ({ video, crew }) => {
 
                     <div className="overview">
                       <div className="heading">Overview</div>
-                      <div className="description">{data.overview}</div>
+                      <div className="description">{data.overview || 'No overview available'}</div>
                     </div>
 
                     <div className="info">
@@ -94,12 +99,10 @@ const DetailsBanner = ({ video, crew }) => {
                           <span className="text">{data.status}</span>
                         </div>
                       )}
-                      {data.release_date && (
+                      {releaseDate && (
                         <div className="infoItem">
                           <span className="text bold">Release Date: </span>
-                          <span className="text">
-                            {dayjs(data.release_date).format("MMM D, YYYY")}
-                          </span>
+                          <span className="text">{releaseDate}</span>
                         </div>
                       )}
                       {data.runtime && (
@@ -144,7 +147,7 @@ const DetailsBanner = ({ video, crew }) => {
                       <div className="info">
                         <span className="text bold">Creator: </span>
                         <span className="text">
-                          {data?.created_by?.map((d, i) => (
+                          {data?.created_by.map((d, i) => (
                             <span key={i}>
                               {d.name}
                               {data?.created_by.length - 1 !== i && ", "}
@@ -162,7 +165,7 @@ const DetailsBanner = ({ video, crew }) => {
                   setVideoId={setVideoId}
                 />
               </ContentWrapper>
-            </React.Fragment>
+            </>
           )}
         </>
       ) : (

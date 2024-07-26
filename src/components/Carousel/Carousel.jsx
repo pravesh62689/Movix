@@ -64,6 +64,10 @@ const Carousel = ({ data, loading, endpoint, title }) => {
               const posterUrl = item.poster_path
                 ? url.poster + item.poster_path
                 : PosterFallback;
+              const rating = typeof item.vote_average === 'number'
+                ? item.vote_average.toFixed(1)
+                : 'N/A'; // Handle cases where vote_average might be undefined or not a number
+
               return (
                 <div
                   key={item.id}
@@ -74,7 +78,7 @@ const Carousel = ({ data, loading, endpoint, title }) => {
                 >
                   <div className="posterBlock">
                     <Img src={posterUrl} />
-                    <CircleRating rating={item.vote_average.toFixed(1)} />
+                    <CircleRating rating={rating} />
                     <Genres data={item.genre_ids.slice(0, 2)} />
                     {console.log(item)}
                   </div>
@@ -89,6 +93,7 @@ const Carousel = ({ data, loading, endpoint, title }) => {
                 </div>
               );
             })}
+
           </div>
         ) : (
           <div className="loadingSkeleton">

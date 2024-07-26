@@ -15,6 +15,17 @@ const MovieCard = ({ data, fromSearch, mediaType }) => {
   const posterUrl = data.poster_path
     ? url.poster + data.poster_path
     : PosterFallback;
+
+  // Ensure vote_average is a number and handle undefined values
+  const rating = typeof data.vote_average === 'number'
+    ? data.vote_average.toFixed(1)
+    : 'N/A'; // Fallback value if vote_average is not a number
+
+  // Ensure release_date is defined and handle undefined values
+  const releaseDate = data.release_date
+    ? dayjs(data.release_date).format("MMM D, YYYY")
+    : 'N/A'; // Fallback value if release_date is undefined
+
   return (
     <div
       className="movieCard"
@@ -24,16 +35,14 @@ const MovieCard = ({ data, fromSearch, mediaType }) => {
         <Img className="posterImg" src={posterUrl} />
         {!fromSearch && (
           <React.Fragment>
-            <CircleRating rating={data.vote_average.toFixed(1)} />
+            <CircleRating rating={rating} />
             <Genres data={data.genre_ids.slice(0, 2)} />
           </React.Fragment>
         )}
       </div>
       <div className="textBlock">
         <span className="title">{data.title || data.name}</span>
-        <span className="date">
-          {dayjs(data.release_date).format("MMM D, YYYY")}
-        </span>
+        <span className="date">{releaseDate}</span>
       </div>
     </div>
   );
