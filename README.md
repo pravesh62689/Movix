@@ -2,7 +2,7 @@
 In this particular website I used Reactjs ,Redux toolkit, SASS , TMBD,API's
 
 Live Demo
-https://64ad528493266f06a7acb067--starlit-malabi-375079.netlify.app/
+[https://64ad528493266f06a7acb067--starlit-malabi-375079.netlify.app/](https://66a35cac1c17315bd018f9bf--cool-conkies-606308.netlify.app/)
 ![Screenshot 2023-07-11 184724](https://github.com/pravesh62689/Movix/assets/84860928/f0c5a1e1-e550-4199-be32-9b4bffd19707)
 ![Uploading Screenshot 2023-07-11 185312.png…]()
 ![Uploading Screenshot 2023-07-11 185252.png…]()
